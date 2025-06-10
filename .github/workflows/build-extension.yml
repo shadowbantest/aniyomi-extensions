@@ -1,0 +1,30 @@
+name: Build ManhuaUS Extension
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set execute permission on Gradle wrapper
+        run: chmod +x ./gradlew
+
+      - name: Build all extensions
+        run: ./gradlew assembleDebug
+
+      - name: Upload ManhuaUS APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ManhuaUS-APK
+          path: src/en/manhuaus/build/outputs/apk/debug/*.apk
